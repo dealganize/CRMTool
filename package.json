@@ -2,7 +2,7 @@
   "name": "thal",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csvtojson": "^2.0.10",
+    "json2csv": "^4.5.3",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "downloadjs": "^1.4.7",
     "puppeteer": "^1.20.0"
   }
