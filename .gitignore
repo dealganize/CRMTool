@@ -3,10 +3,10 @@
 *.DS_Store
 .AppleDouble
 .LSOverride
+creds.js
 
 # Icon must end with two \r
 Icon
-creds.js
 # Thumbnails
 ._*
 
