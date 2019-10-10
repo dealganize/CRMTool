@@ -30,6 +30,11 @@ module.exports = {
 
     var args = process.argv.slice(2);
 
+    if (args === undefined || args.length == 0) {
+      console.error("No argument provided");
+      return;
+    }
+
     await page.goto(
       `https://developers.facebook.com/apps/${args}/instant-games/feedback/?business_id=1866079323706610`
     );
@@ -62,11 +67,12 @@ module.exports = {
       downloadPath: __dirname
     });
 
-    console.log("Download behaviour set...");
     console.log("wait...");
     await wait(10000);
-    console.log("download...");
-    console.log("Fin");
+
+    console.log("Downloaded feedback.csv...");
+
+    console.log("Generated new aggregated file");
     browser.close();
   }
 };
