@@ -45,7 +45,7 @@ module.exports = {
         for (let element of nodeList) {
           if (element.innerText === "Export to CSV") {
             await element.click();
-            items.link = element.className;
+            items.link = element.className; //what do?
           }
         }
         return items;
