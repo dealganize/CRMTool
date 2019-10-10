@@ -1,5 +1,5 @@
 const CSVToJSON = require("csvtojson"),
-  JSONToCSV = require("json2csv").parse,
+  XLSX = require("xlsx"),
   moment = require("moment"),
   fs = require("fs"),
   _ = require("lodash"),
@@ -97,30 +97,30 @@ module.exports = {
           "Total Unique Users": total,
           "Total Facebook Host": facebookApp,
           "Total Messenger Host": messenger,
-          Android: {
-            "Total Android Devices": android,
-            "Facebook Host": androidFacebookHost,
-            "Messenger Host": androidMessengerHost
-          },
-          iOS: {
-            "Total iOS Devices": ios,
-            "Facebook Host": iosFacebookHost,
-            "Messenger Host": iosMessengerHost
-          },
-          Web: {
-            "Total Web Browser": web,
-            "Facebook Host": webFacebookHost,
-            "Messenger Host": webMessengerHost
-          }
+          "Total Android Devices": android,
+          "Total iOS Devices": ios,
+          "Total Web Browser": web
         });
+
+        return updatedJson;
+      })
+      .then(finalJson => {
         var args = process.argv.slice(2);
+
         const gameName = gamesList.getGameName(args);
         const date = moment(new Date()).format("Do MMMM, YYYY");
         const fileName = gameName + "_" + date;
-        const csv = JSONToCSV(updatedJson);
-        fs.writeFileSync(`./${fileName}.csv`, csv);
+
+        var book = XLSX.utils.book_new();
+        var sheet = XLSX.utils.json_to_sheet(finalJson);
+        XLSX.utils.book_append_sheet(book, sheet, "test");
+
+        // XLSX.writeFile(
+        //   book,
+        //   `/run/user/1001/gvfs/smb-share:server=nas.local,share=projekte/FB Messenger & Pages/Dashboards/Users Feedback/${fileName}.xlsx`
+        // );
+        XLSX.writeFile(book, `${fileName}.xlsx`);
         fs.unlinkSync("./feedback.csv");
       });
-    return;
   }
 };
