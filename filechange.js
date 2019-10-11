@@ -1,43 +1,77 @@
-const XLSX = require("xlsx");
+// const _ = require("lodash"),
+//   moment = require("moment"),
+//   CONFIG = require("./config"),
+//   gamesList = require("./gamesList.js"),
+//   XLSX = require("xlsx");
 
-var json = [
-  {
-    Timestamp: "6th October, 2019",
-    PlayerID: "1781121508642999",
-    Locale: "fr_CA",
-    Platform: "WEB",
-    Host_Application: "MESSENGER",
-    App_Version: "",
-    Operating_System: "Windows 10",
-    Screen_Resolution_Height: "",
-    Screen_Resolution_Width: "",
-    Total_Memory: "",
-    Feedback_Text:
-      "[something_else,loading_issues] le jeu n ouvre pas cookie crush",
-    Country: "CA",
-    Language: "fr",
-    Hosted_Asset_Version: "1275"
-  },
-  {
-    Timestamp: "6th October, 2019",
-    PlayerID: "1194688193967611",
-    Locale: "en_US",
-    Platform: "ANDROID",
-    Host_Application: "FACEBOOK",
-    App_Version: "",
-    Operating_System: "Android 8.0.0",
-    Screen_Resolution_Height: "",
-    Screen_Resolution_Width: "",
-    Total_Memory: "",
-    Feedback_Text: "[something_else,loading_issues]",
-    Country: "US",
-    Language: "en",
-    Hosted_Asset_Version: "1275"
-  }
-];
+// module.exports = {
+//   formatJSON: function(json) {
+//     var updatedObj = _.uniqBy(json, "PlayerID");
+//     // this.createPlatformsArray(updatedObj);
+//     var newObj = updatedObj.map(obj => {
+//       for (var key in obj) {
+//         if (key === "Timestamp") {
+//           const formatted = moment.unix(obj.Timestamp).format("Do MMMM, YYYY");
+//           obj[key] = obj[key].replace(obj[key], formatted);
+//         }
+//       }
+//       return obj;
+//     });
+//     return newObj;
+//   },
+//   createXLSX: function() {
+//     const gameName = gamesList.getGameName(CONFIG.processArgs);
+//     const date = moment(new Date()).format("Do MMMM, YYYY");
+//     const fileName = gameName + "_" + date;
 
-var newWb = XLSX.utils.book_new();
-var newWs = XLSX.utils.json_to_sheet(json);
-XLSX.utils.book_append_sheet(newWb, newWs);
+//     var book = XLSX.utils.book_new();
+//     var sheet = XLSX.utils.json_to_sheet(finalJson);
+//     XLSX.utils.book_append_sheet(book, sheet, "test");
+//     XLSX.writeFile(book, `${fileName}.xlsx`);
+//   },
+//   createPlatformsArray: function(json) {
+//     var getUniquePlatforms = _.uniqBy(json, "Platform");
+//     const platformsList = getUniquePlatforms.map(obj => obj.Platform);
+//     CONFIG.platforms.push(...platformsList);
+//     return;
+//   },
+//   updateJson: updatedJson => {
+//     console.log("CONFIG.platforms", CONFIG.platforms);
+//     let android = 0,
+//       ios = 0,
+//       web = 0,
+//       facebookApp = 0,
+//       messenger = 0,
+//       total = 0;
 
-XLSX.writeFile(newWb, "test_data.xlsx");
+//     for (var i = 0; i < updatedJson.length; i++) {
+//       if (updatedJson[i].Platform === "ANDROID") {
+//         android++;
+//       }
+//       if (updatedJson[i].Platform === "IOS") {
+//         ios++;
+//       }
+
+//       if (updatedJson[i].Platform === "WEB") {
+//         web++;
+//       }
+//       if (updatedJson[i].Host_Application === "FACEBOOK") {
+//         facebookApp++;
+//       }
+//       if (updatedJson[i].Host_Application === "MESSENGER") {
+//         messenger++;
+//       }
+//       total++;
+//     }
+//     updatedJson.unshift({
+//       "Total Unique Users": total,
+//       "Total Facebook Host": facebookApp,
+//       "Total Messenger Host": messenger,
+//       "Total Android Devices": android,
+//       "Total iOS Devices": ios,
+//       "Total Web Browser": web
+//     });
+
+//     return updatedJson;
+//   }
+// };
