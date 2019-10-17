@@ -7,8 +7,8 @@ module.exports = {
   formater: async () => {
     await CSVToJSON()
       .fromFile("./feedback.csv")
-      .then(source => {
-        var formatedJson = HELPERS.formatJSON(source);
+      .then(json => {
+        var formatedJson = HELPERS.formatJSON(json);
         return formatedJson;
       })
       .then(finalJson => {

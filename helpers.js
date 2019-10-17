@@ -6,8 +6,7 @@ const _ = require("lodash"),
 
 module.exports = {
   formatJSON: function(json) {
-    var updatedObj = _.uniqBy(json, "PlayerID");
-    var newObj = updatedObj.map(obj => {
+    var newJsonFormatedTimestamp = json.map(obj => {
       for (var key in obj) {
         if (key === "Timestamp") {
           const formatted = moment.unix(obj.Timestamp).format("Do MMMM, YYYY");
@@ -16,7 +15,33 @@ module.exports = {
       }
       return obj;
     });
-    return newObj;
+
+    //
+    var formatedJsonUniqueUsersPerDay = _.uniqBy(
+      newJsonFormatedTimestamp,
+      obj => [obj.Timestamp, obj.PlayerID].join()
+    );
+
+    var formatedJson = this.addEmptyColumn(formatedJsonUniqueUsersPerDay);
+
+    return formatedJson;
+  },
+  addEmptyColumn: function(formatedJson) {
+    formatedJson = formatedJson.map(obj => {
+      return remap(obj, "Total_Memory", "Label", "");
+      function remap(obj, afterKey, newKey, newValue) {
+        const result = {};
+        const keys = Object.keys(obj);
+        for (const key of keys) {
+          result[key] = obj[key];
+          if (key === afterKey) {
+            result[newKey] = newValue;
+          }
+        }
+        return result;
+      }
+    });
+    return formatedJson;
   },
   createXLSX: function(finalJson) {
     const gameName = gamesList.getGameName(CONFIG.processArgs);
@@ -27,6 +52,7 @@ module.exports = {
     var sheet = XLSX.utils.json_to_sheet(finalJson);
     XLSX.utils.book_append_sheet(book, sheet, "test");
     console.log(`${process.env.SHARED_FOLDER}${fileName}.xlsx`);
+    XLSX.writeFile(book, `${fileName}.xlsx`);
     XLSX.writeFile(book, `${process.env.SHARED_FOLDER}${fileName}.xlsx`);
     return;
   }
