@@ -51,8 +51,8 @@ module.exports = {
     var book = XLSX.utils.book_new();
     var sheet = XLSX.utils.json_to_sheet(finalJson);
     XLSX.utils.book_append_sheet(book, sheet, "test");
-    console.log(`${process.env.SHARED_FOLDER}${fileName}.xlsx`);
-    XLSX.writeFile(book, `${fileName}.xlsx`);
+    // console.log(`${process.env.SHARED_FOLDER}${fileName}.xlsx`);
+    // XLSX.writeFile(book, `${fileName}.xlsx`);
     XLSX.writeFile(book, `${process.env.SHARED_FOLDER}${fileName}.xlsx`);
     return;
   }
