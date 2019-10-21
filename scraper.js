@@ -1,12 +1,11 @@
 // Puppeteer connection --> file download
 
-const PUPPETEER = require("puppeteer"),
-  CONFIG = require("./config");
+const PUPPETEER = require("puppeteer");
 
 let wait = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 module.exports = {
-  scrape: async () => {
+  scrape: async gameId => {
     const browser = await PUPPETEER.launch({
       headless: true // set to false - see live browser behaviour
     });
@@ -37,7 +36,7 @@ module.exports = {
     // Wait until developers portal loads
     await Promise.all([
       page.goto(
-        `${process.env.FB_DEVELOPERS_URL}/apps/${CONFIG.processArgs}/instant-games/feedback/?business_id=${process.env.BUSINESS_ID}`
+        `${process.env.FB_DEVELOPERS_URL}/apps/${gameId}/instant-games/feedback/?business_id=${process.env.BUSINESS_ID}`
       ),
       page.waitForNavigation()
     ]);
