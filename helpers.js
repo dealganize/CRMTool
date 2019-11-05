@@ -4,43 +4,44 @@ const _ = require("lodash"),
   XLSX = require("xlsx");
 
 module.exports = {
-  formatJSON: function(json) {
-    var newJsonFormatedTimestamp = json.map(obj => {
-      for (var key in obj) {
-        if (key === "Timestamp") {
-          const formatted = moment.unix(obj.Timestamp).format("Do MMMM, YYYY");
-          obj[key] = obj[key].replace(obj[key], formatted);
-        }
-      }
-      return obj;
-    });
-
-    var formatedJsonUniqueUsersPerDay = _.uniqBy(
-      newJsonFormatedTimestamp,
-      obj => [obj.Timestamp, obj.PlayerID].join()
-    );
-
-    const formatedJson = this.addEmptyColumn(formatedJsonUniqueUsersPerDay);
-    return formatedJson;
-  },
-  addEmptyColumn: function(formatedJson) {
-    formatedJson = formatedJson.map(obj => {
-      return remap(obj, "Total_Memory", "Label", "");
-      function remap(obj, afterKey, newKey, newValue) {
+  formatJSON: async function(json) {
+    let formatedJson = json.map(obj => {
+      return remap(obj, "Timestamp", "Date", "Total_Memory", "Label", "");
+      function remap(
+        obj,
+        timestampKey,
+        dateKey,
+        memoryKey,
+        labelKey,
+        emptyValue
+      ) {
         const result = {};
         const keys = Object.keys(obj);
         for (const key of keys) {
           result[key] = obj[key];
-          if (key === afterKey) {
-            result[newKey] = newValue;
+          if (key === timestampKey) {
+            const formatted = moment
+              .unix(obj.Timestamp)
+              .format("Do MMMM, YYYY");
+            result[dateKey] = formatted;
+          }
+          if (key === memoryKey) {
+            result[labelKey] = emptyValue;
           }
         }
-
         return result;
       }
     });
 
+    formatedJson = await this.formatedJsonUniqueUsersPerDay(formatedJson);
+
     return formatedJson;
+  },
+  formatedJsonUniqueUsersPerDay: function(formatedJson) {
+    var formatedJsonUniqueUsersPerDay = _.uniqBy(formatedJson, obj =>
+      [obj.Date, obj.PlayerID].join()
+    );
+    return formatedJsonUniqueUsersPerDay;
   },
   createXLSX: function(finalJson, gameId) {
     const gameName = gamesList.getGameName(gameId);
